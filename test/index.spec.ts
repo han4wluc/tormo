@@ -14,6 +14,12 @@ class Person {
 
 const repository = new Repository(Person);
 
+const sleep = (seconds = 5000) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, seconds)
+  })
+}
+
 describe("Repository", () => {
   before(() => {
     AV.init({
@@ -23,12 +29,22 @@ describe("Repository", () => {
     });
   })
 
-  beforeEach(async () => {
+  beforeEach(async function () {
     if (process.env.APP_ENV !== 'testing') {
       throw new Error('To run unit test, please set APP_ENV=testing')
     }
-    var query = new AV.Query("Person");
-    await query.destroyAll();
+    this.timeout(25000);
+    // retry multiple attemps in case Lean Cloud server is in cold start
+    for (let i=0; i < 5; i++) {
+      var query = new AV.Query("Person");
+      try {
+        await query.destroyAll();
+        return
+      } catch (error) {
+        console.log('destoryAll failed')
+        await sleep()
+      }
+    }
   });
 
   describe("create", () => {
