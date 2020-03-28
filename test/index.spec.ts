@@ -41,7 +41,7 @@ describe("Repository", () => {
         await query.destroyAll();
         return
       } catch (error) {
-        console.log('destoryAll failed')
+        console.log('destoryAll failed', error)
         await sleep()
       }
     }
