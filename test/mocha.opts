@@ -3,3 +3,4 @@ test/**/*.spec.ts
 --ignore node_modules
 --extension ts
 --recursive
+--timeout 5000
