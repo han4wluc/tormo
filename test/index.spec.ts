@@ -94,6 +94,13 @@ describe("Repository", () => {
       _person.firstName = "hello";
       await repository.save(_person);
     });
+
+    it("should find all results", async () => {
+      const people = await repository.find({});
+      assert.equal(people.length, 1);
+      assert.equal(people[0] instanceof Person, true)
+    })
+
     it("should not find any results", async () => {
       const people = await repository.find({
         firstName: " wallo"

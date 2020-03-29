@@ -1,7 +1,7 @@
 {
   "name": "tormo",
   "description": "An ORM library inspired by TypeORM API, but for custom backends",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/index.js",
   "license": "MIT",
   "author": {
@@ -16,18 +16,19 @@
     "test": "mocha --opts test/mocha.opts",
     "build": "tsc"
   },
+  "peerDependencies": {
+    "leancloud-storage": "^4.5.1"
+  },
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
+    "leancloud-storage": "^4.5.1",
     "mocha": "^7.1.1",
     "node-ts": "^5.0.4",
     "ts-node": "^8.8.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "leancloud-storage": "^4.5.1"
   }
 }
