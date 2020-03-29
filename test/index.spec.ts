@@ -8,6 +8,8 @@ require('dotenv').config({ path: dotEnvPath})
 
 @Entity()
 class Person {
+  id?: string
+
   @Column()
   firstName: string = "";
 }
@@ -22,11 +24,13 @@ const sleep = (seconds = 5000) => {
 
 describe("Repository", () => {
   before(() => {
-    AV.init({
-      appId: process.env.LEAN_CLOUD_APP_ID!,
-      appKey: process.env.LEAN_CLOUD_APP_KEY!,
-      serverURLs: process.env.LEAN_CLOUD_SERVER_URLS
-    });
+    if(!AV.applicationId) {
+      AV.init({
+        appId: process.env.LEAN_CLOUD_APP_ID!,
+        appKey: process.env.LEAN_CLOUD_APP_KEY!,
+        serverURLs: process.env.LEAN_CLOUD_SERVER_URLS
+      });
+    }
   })
 
   beforeEach(async function () {
@@ -150,7 +154,6 @@ describe("Repository", () => {
     it("should not find any results", async () => {
       const res = await repository.remove(person.id);
       assert.equal(res, undefined);
-
       const query = new AV.Query("Person");
       const count = await query.count();
       assert.equal(count, 0);
@@ -172,8 +175,7 @@ describe("Repository", () => {
       _person.firstName = "hello";
       const person = await repository.save(_person);
       const personJson = repository.jsonify(person);
-
-      assert.equal(personJson.objectId, person.id);
+      assert.equal(personJson.id, person.id);
       assert.equal(personJson.firstName, person.firstName);
     });
   });
