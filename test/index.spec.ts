@@ -14,7 +14,9 @@ class Person {
   firstName: string = "";
 }
 
-const repository = new Repository(Person);
+const repository = new Repository(Person, {
+  className: 'Person'
+});
 
 const sleep = (seconds = 5000) => {
   return new Promise((resolve) => {

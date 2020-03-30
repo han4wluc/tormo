@@ -17,8 +17,18 @@ function avObjectToEntity(avObject: any, entity: any) {
   entity.id = avObject.id
 }
 
+interface RepositoryOptions {
+  className: string
+}
+
 export class Repository {
-  constructor(public Class: any) {}
+
+  private className: string;
+  private AVObject: any;
+  constructor(public Class: any, options: RepositoryOptions) {
+    this.className = options.className;
+    this.AVObject = AV.Object.extend(options.className);
+  }
 
   create = (attributes: Object) => {
     const person = new this.Class();
@@ -27,15 +37,14 @@ export class Repository {
   };
 
   save = async (person: any) => {
-    const AVObject = AV.Object.extend(this.Class.name);
-    const avObject = new AVObject(person)
+    const avObject = new this.AVObject(person)
     await avObject.save();
     avObjectToEntity(avObject, person)
     return person;
   };
 
   update = async (id: string, params: any) => {
-    let avObject = AV.Object.createWithoutData(this.Class.name, id);
+    let avObject = AV.Object.createWithoutData(this.className, id);
     await avObject.save(params);
     const person = new this.Class();
     avObjectToEntity(avObject, person)
@@ -43,7 +52,7 @@ export class Repository {
   };
 
   find = async (params: any) => {
-    var query = new AV.Query(this.Class.name);
+    var query = new AV.Query(this.className);
     Object.entries(params).forEach(([key, value]) => {
       query.equalTo(key, value);
     });
@@ -56,7 +65,7 @@ export class Repository {
   };
 
   findOne = async (params: string | any) => {
-    const query = new AV.Query(this.Class.name);
+    const query = new AV.Query(this.className);
 
     if (typeof params === "string") {
       const id = params;
@@ -80,7 +89,7 @@ export class Repository {
   };
 
   remove = async (id: string) => {
-    const avObject = AV.Object.createWithoutData(this.Class.name, id);
+    const avObject = AV.Object.createWithoutData(this.className, id);
     await avObject.destroy();
   };
 
