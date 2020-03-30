@@ -1,7 +1,7 @@
 {
   "name": "tormo",
   "description": "An ORM library inspired by TypeORM API, but for custom backends",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "lib/index.js",
   "license": "MIT",
   "author": {
